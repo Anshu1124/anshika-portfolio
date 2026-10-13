@@ -1,13 +1,21 @@
 import React from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { LEADERSHIP_DATA } from '../../data/portfolioData';
 
 export const Leadership: React.FC = () => {
   const leader = LEADERSHIP_DATA[0];
+  const shouldReduceMotion = useReducedMotion();
 
   return (
     <section id="experience" className="py-24 border-t border-[#292D36]">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="space-y-10">
+        <motion.div
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
+          whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+          className="space-y-10"
+        >
           {/* Section Header */}
           <div>
             <span className="text-xs font-mono text-[#B9A0FF] uppercase tracking-wider block mb-2 font-medium">
@@ -23,7 +31,7 @@ export const Leadership: React.FC = () => {
 
           {/* Main Leadership Role Card */}
           {leader && (
-            <div className="bg-[#141720] border border-[#292D36] rounded-xl p-6 sm:p-8 space-y-6">
+            <div className="bg-[#141720] border border-[#292D36] hover:border-[#B9A0FF]/40 rounded-xl p-6 sm:p-8 space-y-6 transition-all duration-300">
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 border-b border-[#292D36] pb-5">
                 <div>
                   <h3 className="font-heading text-lg sm:text-xl font-bold text-[#F5F5F7]">
@@ -71,7 +79,7 @@ export const Leadership: React.FC = () => {
               </div>
             </div>
           )}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Copy, Check, ArrowUpRight, Send } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { PERSONAL_INFO } from '../../data/portfolioData';
 import { GithubIcon, LinkedinIcon } from '../common/Icons';
 
@@ -16,6 +17,7 @@ export const Contact: React.FC<ContactProps> = () => {
   });
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
 
   const copyEmail = () => {
     navigator.clipboard.writeText(PERSONAL_INFO.email);
@@ -38,7 +40,13 @@ export const Contact: React.FC<ContactProps> = () => {
   return (
     <section id="contact" className="py-24 border-t border-[#292D36]">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="space-y-12">
+        <motion.div
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
+          whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+          className="space-y-12"
+        >
           {/* Section Header & Closing CTA */}
           <div className="max-w-xl space-y-3">
             <span className="text-xs font-mono text-[#B9A0FF] uppercase tracking-wider block font-medium">
@@ -85,7 +93,7 @@ export const Contact: React.FC<ContactProps> = () => {
                   href={PERSONAL_INFO.github}
                   target="_blank"
                   rel="noreferrer"
-                  className="p-4 rounded-xl bg-[#141720] border border-[#292D36] hover:border-[#B9A0FF]/40 text-[#A5A8B2] hover:text-[#F5F5F7] transition-colors flex items-center justify-between group"
+                  className="p-4 rounded-xl bg-[#141720] border border-[#292D36] hover:border-[#B9A0FF]/40 text-[#A5A8B2] hover:text-[#F5F5F7] transition-all flex items-center justify-between group hover:-translate-y-0.5"
                 >
                   <div className="flex items-center gap-2.5">
                     <GithubIcon className="w-4 h-4" />
@@ -98,7 +106,7 @@ export const Contact: React.FC<ContactProps> = () => {
                   href={PERSONAL_INFO.linkedin}
                   target="_blank"
                   rel="noreferrer"
-                  className="p-4 rounded-xl bg-[#141720] border border-[#292D36] hover:border-[#B9A0FF]/40 text-[#A5A8B2] hover:text-[#F5F5F7] transition-colors flex items-center justify-between group"
+                  className="p-4 rounded-xl bg-[#141720] border border-[#292D36] hover:border-[#B9A0FF]/40 text-[#A5A8B2] hover:text-[#F5F5F7] transition-all flex items-center justify-between group hover:-translate-y-0.5"
                 >
                   <div className="flex items-center gap-2.5">
                     <LinkedinIcon className="w-4 h-4" />
@@ -174,7 +182,7 @@ export const Contact: React.FC<ContactProps> = () => {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="w-full py-2.5 px-4 rounded-lg font-medium text-xs bg-[#B9A0FF] hover:bg-[#cbb8ff] text-[#0B0D12] transition-colors flex items-center justify-center gap-1.5 disabled:opacity-50"
+                    className="w-full py-2.5 px-4 rounded-lg font-medium text-xs bg-[#B9A0FF] hover:bg-[#cbb8ff] text-[#0B0D12] transition-all hover:shadow-[0_0_15px_rgba(185,160,255,0.25)] flex items-center justify-center gap-1.5 disabled:opacity-50"
                   >
                     <Send className="w-3.5 h-3.5" />
                     <span>{submitting ? 'Sending...' : 'Send Message'}</span>
@@ -183,7 +191,7 @@ export const Contact: React.FC<ContactProps> = () => {
               )}
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

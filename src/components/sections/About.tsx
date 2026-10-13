@@ -1,11 +1,20 @@
 import React from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { EDUCATION_DATA } from '../../data/portfolioData';
 
 export const About: React.FC = () => {
+  const shouldReduceMotion = useReducedMotion();
+
   return (
     <section id="about" className="py-24 border-t border-[#292D36]">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="space-y-12">
+        <motion.div
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
+          whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+          className="space-y-12"
+        >
           {/* Section Header */}
           <div>
             <span className="text-xs font-mono text-[#B9A0FF] uppercase tracking-wider block mb-2 font-medium">
@@ -21,10 +30,10 @@ export const About: React.FC = () => {
             {/* Left Column: Short Professional Introduction */}
             <div className="lg:col-span-7 space-y-4 text-sm sm:text-base text-[#A5A8B2] leading-relaxed">
               <p>
-                I am a Computer Science undergraduate focused on building reliable web services, real-time message brokers, and spatial data systems. My work prioritizes clean system boundaries, defensive data validation, and predictable deployment.
+                I am a Computer Science undergraduate focused on building reliable web services, real-time message brokers, and applied systems. My work prioritizes clean system boundaries, defensive data validation, and predictable deployment.
               </p>
               <p>
-                Whether designing token dispatch pipelines for public administration or processing satellite and telemetry feeds, I value solutions that are structurally sound and simple to maintain.
+                Whether designing token dispatch pipelines for public administration (Gatimaan), agricultural trade workflows (KrishiLink), or emergency telemetry nodes (NaariShield), I value solutions that are structurally sound and simple to maintain.
               </p>
               <p>
                 Alongside engineering systems, I coordinate student workshops at the Amity Coding Club, helping peers build solid foundations in Git, C++, and modern web tools.
@@ -66,7 +75,7 @@ export const About: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

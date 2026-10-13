@@ -40,7 +40,7 @@ export function App() {
         {/* 2. About: short professional introduction and education */}
         <About />
 
-        {/* 3. Selected projects: GATIMAAN, SENTINEL, NAARTISHIELD, SafeNest */}
+        {/* 3. Selected projects: NAARISHIELD, GATIMAAN, KRISHILINK */}
         <Projects onSelectProject={handleSelectProject} />
 
         {/* 4. Technical expertise: grouped text-based skill lists */}

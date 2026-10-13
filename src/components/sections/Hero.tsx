@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowDown, FileText } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { PERSONAL_INFO } from '../../data/portfolioData';
 
 interface HeroProps {
@@ -7,12 +8,19 @@ interface HeroProps {
 }
 
 export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
+  const shouldReduceMotion = useReducedMotion();
+
   return (
     <section className="relative pt-36 pb-24 md:pt-44 md:pb-32 overflow-hidden">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center">
           {/* Left Column: Focused Typographic Content */}
-          <div className="lg:col-span-7 space-y-6">
+          <motion.div
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
+            animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, ease: 'easeOut' }}
+            className="lg:col-span-7 space-y-6"
+          >
             {/* Understated Availability Label */}
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono text-[#A5A8B2] bg-[#141720] border border-[#292D36]">
               <span className="w-1.5 h-1.5 rounded-full bg-[#B9A0FF]"></span>
@@ -31,14 +39,14 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
 
             {/* Concise 2-3 Line Introduction */}
             <p className="text-sm sm:text-base text-[#A5A8B2] leading-relaxed max-w-xl">
-              Computer Science undergraduate focusing on resilient full-stack systems, real-time event architectures, and geospatial intelligence platforms.
+              Computer Science undergraduate focusing on resilient full-stack systems, real-time event architectures, and applied software engineering.
             </p>
 
             {/* Two Primary Actions */}
             <div className="flex flex-wrap items-center gap-3 pt-2">
               <a
                 href="#projects"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs sm:text-sm font-semibold bg-[#B9A0FF] hover:bg-[#cbb8ff] text-[#0B0D12] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B9A0FF]"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs sm:text-sm font-semibold bg-[#B9A0FF] hover:bg-[#cbb8ff] text-[#0B0D12] transition-all hover:shadow-[0_0_20px_rgba(185,160,255,0.2)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B9A0FF]"
               >
                 <span>View Projects</span>
                 <ArrowDown className="w-4 h-4" />
@@ -58,14 +66,19 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
             <div className="pt-2 text-xs font-mono text-[#A5A8B2]">
               <span>Full-stack development · Real-time systems · Applied AI</span>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right Column: Minimal Abstract Architectural Visual */}
-          <div className="lg:col-span-5 flex justify-center lg:justify-end">
+          <motion.div
+            initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.96 }}
+            animate={shouldReduceMotion ? undefined : { opacity: 1, scale: 1 }}
+            transition={{ duration: 0.55, delay: shouldReduceMotion ? 0 : 0.1, ease: 'easeOut' }}
+            className="lg:col-span-5 flex justify-center lg:justify-end"
+          >
             <div className="w-full max-w-md bg-[#141720] border border-[#292D36] rounded-xl p-6 shadow-sm">
               <div className="flex items-center justify-between pb-4 border-b border-[#292D36] text-[11px] font-mono text-[#A5A8B2]">
                 <span className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-[#292D36]"></span>
+                  <span className="w-2 h-2 rounded-full bg-[#B9A0FF]"></span>
                   <span>SYSTEM OVERVIEW</span>
                 </span>
                 <span>STATUS: OPERATIONAL</span>
@@ -89,7 +102,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
                 <div className="p-3 rounded-lg bg-[#0B0D12] border border-[#292D36] flex items-center justify-between">
                   <span className="text-[#F5F5F7] font-medium">02 Event Pipeline</span>
                   <span className="text-[10px] text-[#B9A0FF] px-2 py-0.5 rounded bg-[#141720] border border-[#292D36]">
-                    Socket.IO / FastAPI
+                    Socket.IO / Express
                   </span>
                 </div>
 
@@ -97,11 +110,11 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
                   <span className="text-xs">↓</span>
                 </div>
 
-                {/* Layer 3: Persistence & GIS */}
+                {/* Layer 3: Persistence */}
                 <div className="p-3 rounded-lg bg-[#0B0D12] border border-[#292D36] flex items-center justify-between">
-                  <span className="text-[#F5F5F7] font-medium">03 Spatial Storage</span>
+                  <span className="text-[#F5F5F7] font-medium">03 Relational Storage</span>
                   <span className="text-[10px] text-[#A5A8B2] px-2 py-0.5 rounded bg-[#141720] border border-[#292D36]">
-                    PostGIS / Postgres
+                    PostgreSQL / Transactions
                   </span>
                 </div>
               </div>
@@ -111,7 +124,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
                 <span className="text-[#B9A0FF]">ACID TRANSACTIONS</span>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
