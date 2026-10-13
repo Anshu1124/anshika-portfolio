@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-primary: #0B0D12;
+    --bg-surface: #141720;
+    --text-primary: #F5F5F7;
+    --text-secondary: #A5A8B2;
+    --accent: #B9A0FF;
+    --border-subtle: #292D36;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    background-color: #0B0D12;
+    color: #F5F5F7;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  body {
+    background-color: #0B0D12;
+    color: #F5F5F7;
+    min-height: 100vh;
+    overflow-x: hidden;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #F5F5F7;
+    letter-spacing: -0.02em;
+  }
+}
+
+/* Subtle, architectural grid background */
+.architectural-grid {
+  background-image: 
+    linear-gradient(to right, rgba(41, 45, 54, 0.35) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(41, 45, 54, 0.35) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.architectural-grid-fine {
+  background-image: 
+    linear-gradient(to right, rgba(41, 45, 54, 0.2) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(41, 45, 54, 0.2) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+/* Restrained scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0B0D12;
+}
+::-webkit-scrollbar-thumb {
+  background: #292D36;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3A3F4B;
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
