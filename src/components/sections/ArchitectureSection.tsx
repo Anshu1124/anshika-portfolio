@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Layers, ExternalLink } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import { PROJECTS_DATA } from '../../data/portfolioData';
 import { ArchitectureDiagram } from '../common/ArchitectureDiagram';
 import type { ProjectData } from '../../types/portfolio';

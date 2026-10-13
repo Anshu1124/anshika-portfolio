@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Copy, Check, ArrowUpRight, Send } from 'lucide-react';
+import { Copy, Check, ArrowUpRight, Send } from 'lucide-react';
 import { PERSONAL_INFO } from '../../data/portfolioData';
 import { GithubIcon, LinkedinIcon } from '../common/Icons';
 
