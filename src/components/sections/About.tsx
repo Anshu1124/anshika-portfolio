@@ -30,13 +30,10 @@ export const About: React.FC = () => {
             {/* Left Column: Short Professional Introduction */}
             <div className="lg:col-span-7 space-y-4 text-sm sm:text-base text-[#A5A8B2] leading-relaxed">
               <p>
-                I am a Computer Science undergraduate focused on building reliable web services, real-time message brokers, and applied systems. My work prioritizes clean system boundaries, defensive data validation, and predictable deployment.
+                I am a Computer Science and Engineering undergraduate at Amity University Madhya Pradesh, Gwalior (expected graduation 2028). My work is centered on building practical software—spanning full-stack web engineering, real-time event-driven systems, and applied machine learning.
               </p>
               <p>
-                Whether designing token dispatch pipelines for public administration (Gatimaan), agricultural trade workflows (KrishiLink), or emergency telemetry nodes (NaariShield), I value solutions that are structurally sound and simple to maintain.
-              </p>
-              <p>
-                Alongside engineering systems, I coordinate student workshops at the Amity Coding Club, helping peers build solid foundations in Git, C++, and modern web tools.
+                Rather than treating code in isolation, I focus on solving real-world utility problems: designing clean API contracts, ensuring relational database integrity, and engineering responsive interfaces that remain reliable under real conditions.
               </p>
             </div>
 

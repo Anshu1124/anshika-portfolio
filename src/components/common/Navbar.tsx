@@ -3,10 +3,10 @@ import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { PERSONAL_INFO } from '../../data/portfolioData';
 
 interface NavbarProps {
-  onOpenResume: () => void;
+  onOpenResume?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenResume }) => {
+export const Navbar: React.FC<NavbarProps> = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -21,7 +21,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenResume }) => {
   const navLinks = [
     { name: 'About', href: '#about' },
     { name: 'Projects', href: '#projects' },
-    { name: 'Experience', href: '#experience' },
+    { name: 'Achievements', href: '#achievements' },
     { name: 'Contact', href: '#contact' },
   ];
 
@@ -49,7 +49,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenResume }) => {
           </a>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-6 text-xs font-medium text-[#A5A8B2]">
+          <nav className="hidden md:flex items-center gap-7 text-xs font-medium text-[#A5A8B2]">
             {navLinks.map((link) => (
               <a
                 key={link.name}
@@ -61,16 +61,18 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenResume }) => {
             ))}
           </nav>
 
-          {/* Restrained Resume Action */}
+          {/* Accessible, Understated Resume Link */}
           <div className="hidden md:flex items-center">
-            <button
-              type="button"
-              onClick={onOpenResume}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#141720] text-[#F5F5F7] border border-[#292D36] hover:border-[#B9A0FF]/60 hover:text-[#B9A0FF] transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-[#B9A0FF]"
+            <a
+              href="/Anshika_Agarwal_Resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-[#A5A8B2] hover:text-[#B9A0FF] transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-[#B9A0FF] py-1 px-2.5 rounded hover:bg-[#141720]"
+              aria-label="View Resume in new tab"
             >
-              <span>Resume</span>
+              <span>Résumé</span>
               <ArrowUpRight className="w-3.5 h-3.5 text-[#A5A8B2]" />
-            </button>
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -101,17 +103,16 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenResume }) => {
             </a>
           ))}
           <div className="pt-2 border-t border-[#292D36]">
-            <button
-              type="button"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenResume();
-              }}
+            <a
+              href="/Anshika_Agarwal_Resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setMobileMenuOpen(false)}
               className="w-full py-2 px-3 rounded-lg text-xs font-medium bg-[#141720] text-[#F5F5F7] border border-[#292D36] hover:text-[#B9A0FF] hover:border-[#B9A0FF]/60 flex items-center justify-center gap-1.5"
             >
-              <span>View Resume</span>
+              <span>View Résumé (PDF)</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
-            </button>
+            </a>
           </div>
         </div>
       )}

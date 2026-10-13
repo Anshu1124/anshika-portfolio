@@ -12,11 +12,11 @@ interface ProjectsProps {
 export const Projects: React.FC<ProjectsProps> = ({ onSelectProject }) => {
   const shouldReduceMotion = useReducedMotion();
 
-  // Curated 3-4 technology tags for each of the three projects
+  // Curated technology tags for each of the three projects
   const getProjectTechTags = (id: string): string[] => {
     switch (id) {
       case 'naarishield':
-        return ['Arduino C++', 'ESP8266', 'Node.js', 'Telemetry'];
+        return ['Arduino', 'ESP8266', 'Node.js', 'Express.js', 'MongoDB'];
       case 'gatimaan':
         return ['React 19', 'Socket.IO', 'Node.js', 'PostgreSQL'];
       case 'krishilink':

@@ -53,6 +53,8 @@ export interface Achievement {
   position: string;
   prizeAmount?: string;
   category: 'Hackathon' | 'Leadership' | 'Academic';
+  track?: string;
+  team?: string;
   description: string;
   highlights: string[];
   dateString?: string;

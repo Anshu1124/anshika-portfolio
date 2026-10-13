@@ -4,8 +4,7 @@ import { Hero } from './components/sections/Hero';
 import { About } from './components/sections/About';
 import { Projects } from './components/sections/Projects';
 import { Skills } from './components/sections/Skills';
-import { Achievements } from './components/sections/Achievements';
-import { Leadership } from './components/sections/Leadership';
+import { AchievementsLeadership } from './components/sections/AchievementsLeadership';
 import { Contact } from './components/sections/Contact';
 import { Footer } from './components/sections/Footer';
 import { CaseStudyModal } from './components/common/CaseStudyModal';
@@ -35,7 +34,7 @@ export function App() {
       {/* Main Page Flow */}
       <main className="flex-1">
         {/* 1. Hero: name, headline, concise intro, primary actions */}
-        <Hero onOpenResume={handleOpenResume} />
+        <Hero />
 
         {/* 2. About: short professional introduction and education */}
         <About />
@@ -43,16 +42,13 @@ export function App() {
         {/* 3. Selected projects: NAARISHIELD, GATIMAAN, KRISHILINK */}
         <Projects onSelectProject={handleSelectProject} />
 
-        {/* 4. Technical expertise: grouped text-based skill lists */}
+        {/* 4. Technical skills: grouped skills and practical context */}
         <Skills />
 
-        {/* 5. Achievements: MUJ HACX 4.0 first-place award & verified honors */}
-        <Achievements />
+        {/* 5. Achievements and Leadership: verified honors & campus coordination */}
+        <AchievementsLeadership />
 
-        {/* 6. Leadership & Experience: coding club coordination & activities */}
-        <Leadership />
-
-        {/* 7. Contact: email copy, GitHub, LinkedIn, closing CTA */}
+        {/* 6. Contact: email copy, GitHub, LinkedIn, closing CTA */}
         <Contact onOpenResume={handleOpenResume} />
       </main>
 

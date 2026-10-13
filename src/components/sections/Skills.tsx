@@ -18,13 +18,13 @@ export const Skills: React.FC = () => {
           {/* Section Header */}
           <div>
             <span className="text-xs font-mono text-[#B9A0FF] uppercase tracking-wider block mb-2 font-medium">
-              03 / Technical Expertise
+              03 / Technical Skills
             </span>
             <h2 className="font-heading text-2xl sm:text-3xl font-bold text-[#F5F5F7] tracking-tight">
-              Grouped technical skills and practical implementation context.
+              Technical Skills
             </h2>
             <p className="text-sm text-[#A5A8B2] mt-2 max-w-xl">
-              Technologies tested in project codebases, real-time message streams, and embedded prototypes.
+              Technologies tested in project codebases, real-time message pipelines, and embedded prototypes.
             </p>
           </div>
 

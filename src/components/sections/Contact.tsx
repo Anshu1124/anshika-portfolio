@@ -50,7 +50,7 @@ export const Contact: React.FC<ContactProps> = () => {
           {/* Section Header & Closing CTA */}
           <div className="max-w-xl space-y-3">
             <span className="text-xs font-mono text-[#B9A0FF] uppercase tracking-wider block font-medium">
-              06 / Contact
+              05 / Contact
             </span>
             <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-[#F5F5F7] tracking-tight">
               Get in touch.
@@ -115,6 +115,20 @@ export const Contact: React.FC<ContactProps> = () => {
                   <ArrowUpRight className="w-3.5 h-3.5 text-[#A5A8B2] group-hover:text-[#B9A0FF] transition-colors" />
                 </a>
               </div>
+
+              {/* Download Resume Action */}
+              <a
+                href="/Anshika_Agarwal_Resume.pdf"
+                download="Anshika_Agarwal_Resume.pdf"
+                className="w-full p-4 rounded-xl bg-[#141720] border border-[#292D36] hover:border-[#B9A0FF]/60 text-[#F5F5F7] hover:text-[#B9A0FF] transition-all flex items-center justify-between group hover:-translate-y-0.5"
+                title="Download original curriculum vitae PDF"
+              >
+                <div className="flex items-center gap-2.5">
+                  <span className="w-2 h-2 rounded-full bg-[#B9A0FF]"></span>
+                  <span className="text-xs font-mono font-medium">Download Résumé (PDF)</span>
+                </div>
+                <ArrowUpRight className="w-3.5 h-3.5 text-[#A5A8B2] group-hover:text-[#B9A0FF] transition-colors" />
+              </a>
 
               {/* Location & Timezone Note */}
               <div className="text-xs font-mono text-[#A5A8B2] px-1 pt-1">
