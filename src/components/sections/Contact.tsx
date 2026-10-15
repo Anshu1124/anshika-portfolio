@@ -132,6 +132,7 @@ export const Contact: React.FC<ContactProps> = () => {
     }
 
     setSubmitting(true);
+    console.log('[ContactForm] Initiating Formspree submission to:', endpoint);
 
     try {
       const response = await fetch(endpoint, {
@@ -146,6 +147,8 @@ export const Contact: React.FC<ContactProps> = () => {
           message: trimmedMessage,
         }),
       });
+
+      console.log('[ContactForm] Response status received:', response.status);
 
       if (response.ok) {
         setSubmitStatus({
