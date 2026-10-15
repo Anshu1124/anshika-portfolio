@@ -1,23 +1,50 @@
 import React, { useState } from 'react';
-import { Copy, Check, ArrowUpRight, Send } from 'lucide-react';
+import { Copy, Check, ArrowUpRight, Send, Loader2, AlertCircle, AlertTriangle } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { PERSONAL_INFO } from '../../data/portfolioData';
 import { GithubIcon, LinkedinIcon } from '../common/Icons';
 
 interface ContactProps {
-  onOpenResume: () => void;
+  onOpenResume?: () => void;
+}
+
+interface FormData {
+  name: string;
+  email: string;
+  message: string;
+}
+
+interface FormErrors {
+  name?: string;
+  email?: string;
+  message?: string;
+}
+
+interface SubmitStatus {
+  type: 'idle' | 'success' | 'error';
+  message?: string;
 }
 
 export const Contact: React.FC<ContactProps> = () => {
   const [copied, setCopied] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
     message: '',
   });
-  const [submitted, setSubmitted] = useState(false);
+  const [errors, setErrors] = useState<FormErrors>({});
   const [submitting, setSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<SubmitStatus>({ type: 'idle' });
   const shouldReduceMotion = useReducedMotion();
+
+  // Read Formspree endpoint from environment variable, stripping any accidental surrounding quotes
+  const rawEndpoint = (import.meta.env.VITE_FORMSPREE_ENDPOINT || '').trim();
+  const endpoint = rawEndpoint.replace(/^["']|["']$/g, '').trim();
+  const isEndpointConfigured = Boolean(
+    endpoint &&
+    !endpoint.includes('your_form_id') &&
+    !endpoint.includes('FORM_ID')
+  );
 
   const copyEmail = () => {
     navigator.clipboard.writeText(PERSONAL_INFO.email);
@@ -25,16 +52,134 @@ export const Contact: React.FC<ContactProps> = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const validateField = (field: keyof FormData, value: string): string | undefined => {
+    const trimmed = value.trim();
+    if (field === 'name') {
+      if (!trimmed) return 'Name is required.';
+      if (trimmed.length < 2) return 'Name must be at least 2 characters.';
+    }
+    if (field === 'email') {
+      if (!trimmed) return 'Email address is required.';
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(trimmed)) return 'Please enter a valid email address.';
+    }
+    if (field === 'message') {
+      if (!trimmed) return 'Message is required.';
+      if (trimmed.length < 10) return 'Message must be at least 10 characters.';
+    }
+    return undefined;
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Clear field-specific error as user types if it was invalid
+    if (errors[name as keyof FormErrors]) {
+      const error = validateField(name as keyof FormData, value);
+      setErrors((prev) => ({ ...prev, [name]: error }));
+    }
+
+    // Reset submit error state once user starts editing again
+    if (submitStatus.type === 'error') {
+      setSubmitStatus({ type: 'idle' });
+    }
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    const error = validateField(name as keyof FormData, value);
+    setErrors((prev) => ({ ...prev, [name]: error }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message) return;
+
+    // Prevent duplicate submissions while in progress
+    if (submitting) return;
+
+    const trimmedName = formData.name.trim();
+    const trimmedEmail = formData.email.trim();
+    const trimmedMessage = formData.message.trim();
+
+    const nameError = validateField('name', trimmedName);
+    const emailError = validateField('email', trimmedEmail);
+    const messageError = validateField('message', trimmedMessage);
+
+    if (nameError || emailError || messageError) {
+      setErrors({
+        name: nameError,
+        email: emailError,
+        message: messageError,
+      });
+      return;
+    }
+
+    // Clear validation errors
+    setErrors({});
+    setSubmitStatus({ type: 'idle' });
+
+    // Validate endpoint configuration
+    if (!isEndpointConfigured || !endpoint) {
+      setSubmitStatus({
+        type: 'error',
+        message: 'Contact form endpoint is not configured yet. Please configure VITE_FORMSPREE_ENDPOINT in your environment variables.',
+      });
+      return;
+    }
+
     setSubmitting(true);
-    setTimeout(() => {
+
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: trimmedName,
+          email: trimmedEmail,
+          message: trimmedMessage,
+        }),
+      });
+
+      if (response.ok) {
+        setSubmitStatus({
+          type: 'success',
+          message: 'Message sent successfully! Thank you for reaching out.',
+        });
+        // Clear form only on verified successful submission
+        setFormData({ name: '', email: '', message: '' });
+      } else {
+        let errorMessage = 'Failed to send message. Please try again or reach out via direct email.';
+        try {
+          const data = await response.json();
+          if (data?.errors && Array.isArray(data.errors) && data.errors.length > 0) {
+            errorMessage = data.errors.map((item: { message?: string }) => item.message || '').filter(Boolean).join('. ');
+          } else if (typeof data?.error === 'string') {
+            errorMessage = data.error;
+          }
+        } catch {
+          // If response body is not JSON, use default error message
+        }
+
+        setSubmitStatus({
+          type: 'error',
+          message: errorMessage,
+        });
+        // Note: visitor's entered data in formData is intentionally preserved!
+      }
+    } catch (err) {
+      console.error('Contact form submission error:', err);
+      setSubmitStatus({
+        type: 'error',
+        message: 'Network error occurred. Please check your connection or contact me directly via email.',
+      });
+      // Note: visitor's entered data in formData is intentionally preserved!
+    } finally {
       setSubmitting(false);
-      setSubmitted(true);
-      setFormData({ name: '', email: '', message: '' });
-      setTimeout(() => setSubmitted(false), 5000);
-    }, 600);
+    }
   };
 
   return (
@@ -136,70 +281,171 @@ export const Contact: React.FC<ContactProps> = () => {
               </div>
             </div>
 
-            {/* Right Column: Clean Message Form */}
+            {/* Right Column: Message Form */}
             <div className="lg:col-span-7 bg-[#141720] border border-[#292D36] rounded-xl p-6 sm:p-7">
-              {submitted ? (
-                <div className="py-8 text-center space-y-2">
-                  <div className="w-8 h-8 rounded-full bg-[#0B0D12] border border-[#292D36] flex items-center justify-center mx-auto text-[#B9A0FF]">
-                    <Check className="w-4 h-4" />
+              {/* Endpoint Configuration Warning Notice */}
+              {!isEndpointConfigured && (
+                <div className="mb-5 p-3.5 rounded-lg bg-[#1a1710] border border-amber-500/30 text-amber-200 text-xs font-mono flex items-start gap-2.5">
+                  <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                  <div className="space-y-1">
+                    <p className="font-semibold text-amber-300">Formspree Endpoint Not Configured</p>
+                    <p className="text-[11px] text-amber-200/80 leading-relaxed font-sans">
+                      Add <code className="bg-[#0B0D12] text-[#B9A0FF] px-1 py-0.5 rounded font-mono text-[11px]">VITE_FORMSPREE_ENDPOINT</code> to your <code className="bg-[#0B0D12] text-[#B9A0FF] px-1 py-0.5 rounded font-mono text-[11px]">.env</code> file locally or in Vercel Environment Variables to receive visitor emails directly in your inbox.
+                    </p>
                   </div>
-                  <h4 className="font-heading text-sm font-bold text-[#F5F5F7]">Message Sent</h4>
-                  <p className="text-xs text-[#A5A8B2]">
-                    Thank you for reaching out. I will respond to your note promptly.
+                </div>
+              )}
+
+              {submitStatus.type === 'success' ? (
+                <div className="py-8 text-center space-y-3">
+                  <div className="w-10 h-10 rounded-full bg-[#0B0D12] border border-[#B9A0FF]/30 flex items-center justify-center mx-auto text-[#B9A0FF] shadow-[0_0_15px_rgba(185,160,255,0.2)]">
+                    <Check className="w-5 h-5" />
+                  </div>
+                  <h4 className="font-heading text-base font-bold text-[#F5F5F7]">Message sent successfully!</h4>
+                  <p className="text-xs sm:text-sm text-[#A5A8B2] max-w-sm mx-auto">
+                    Thank you for reaching out. Your message has been delivered to my inbox and I will respond to your note promptly.
                   </p>
+                  <div className="pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setSubmitStatus({ type: 'idle' })}
+                      className="px-4 py-2 rounded-lg text-xs font-mono text-[#F5F5F7] bg-[#0B0D12] border border-[#292D36] hover:border-[#B9A0FF]/40 hover:text-[#B9A0FF] transition-all"
+                    >
+                      Send another message
+                    </button>
+                  </div>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-mono text-[#A5A8B2] uppercase tracking-wider mb-1.5">
-                        Name
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        placeholder="Your name"
-                        className="w-full px-3.5 py-2 rounded-lg bg-[#0B0D12] border border-[#292D36] text-xs text-[#F5F5F7] placeholder-[#A5A8B2]/50 focus:outline-none focus:border-[#B9A0FF] transition-colors"
-                      />
+                <form onSubmit={handleSubmit} noValidate className="space-y-4">
+                  {/* Submission Error Banner */}
+                  {submitStatus.type === 'error' && (
+                    <div className="p-3.5 rounded-lg bg-[#241315] border border-red-500/40 text-red-200 text-xs flex items-start gap-2.5">
+                      <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+                      <div className="space-y-0.5">
+                        <p className="font-semibold text-red-300">Submission Error</p>
+                        <p className="text-[11px] text-red-200/90 leading-relaxed">{submitStatus.message}</p>
+                      </div>
                     </div>
+                  )}
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Name Field */}
                     <div>
-                      <label className="block text-xs font-mono text-[#A5A8B2] uppercase tracking-wider mb-1.5">
-                        Email
+                      <label
+                        htmlFor="contact-name"
+                        className="block text-xs font-mono text-[#A5A8B2] uppercase tracking-wider mb-1.5"
+                      >
+                        Name <span className="text-[#B9A0FF]">*</span>
                       </label>
                       <input
-                        type="email"
+                        id="contact-name"
+                        type="text"
+                        name="name"
                         required
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        placeholder="your.email@domain.com"
-                        className="w-full px-3.5 py-2 rounded-lg bg-[#0B0D12] border border-[#292D36] text-xs text-[#F5F5F7] placeholder-[#A5A8B2]/50 focus:outline-none focus:border-[#B9A0FF] transition-colors"
+                        disabled={submitting}
+                        value={formData.name}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        placeholder="Your name"
+                        aria-invalid={Boolean(errors.name)}
+                        aria-describedby={errors.name ? 'name-error' : undefined}
+                        className={`w-full px-3.5 py-2 rounded-lg bg-[#0B0D12] border text-xs text-[#F5F5F7] placeholder-[#A5A8B2]/50 focus:outline-none transition-colors disabled:opacity-50 ${
+                          errors.name
+                            ? 'border-red-500/80 focus:border-red-400'
+                            : 'border-[#292D36] focus:border-[#B9A0FF]'
+                        }`}
                       />
+                      {errors.name && (
+                        <p id="name-error" className="mt-1.5 text-[11px] font-mono text-red-400">
+                          {errors.name}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Email Field */}
+                    <div>
+                      <label
+                        htmlFor="contact-email"
+                        className="block text-xs font-mono text-[#A5A8B2] uppercase tracking-wider mb-1.5"
+                      >
+                        Email <span className="text-[#B9A0FF]">*</span>
+                      </label>
+                      <input
+                        id="contact-email"
+                        type="email"
+                        name="email"
+                        required
+                        disabled={submitting}
+                        value={formData.email}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        placeholder="your.email@domain.com"
+                        aria-invalid={Boolean(errors.email)}
+                        aria-describedby={errors.email ? 'email-error' : undefined}
+                        className={`w-full px-3.5 py-2 rounded-lg bg-[#0B0D12] border text-xs text-[#F5F5F7] placeholder-[#A5A8B2]/50 focus:outline-none transition-colors disabled:opacity-50 ${
+                          errors.email
+                            ? 'border-red-500/80 focus:border-red-400'
+                            : 'border-[#292D36] focus:border-[#B9A0FF]'
+                        }`}
+                      />
+                      {errors.email && (
+                        <p id="email-error" className="mt-1.5 text-[11px] font-mono text-red-400">
+                          {errors.email}
+                        </p>
+                      )}
                     </div>
                   </div>
 
+                  {/* Message Field */}
                   <div>
-                    <label className="block text-xs font-mono text-[#A5A8B2] uppercase tracking-wider mb-1.5">
-                      Message
+                    <label
+                      htmlFor="contact-message"
+                      className="block text-xs font-mono text-[#A5A8B2] uppercase tracking-wider mb-1.5"
+                    >
+                      Message <span className="text-[#B9A0FF]">*</span>
                     </label>
                     <textarea
+                      id="contact-message"
+                      name="message"
                       required
                       rows={4}
+                      disabled={submitting}
                       value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
                       placeholder="Write your note or opportunity details..."
-                      className="w-full px-3.5 py-2 rounded-lg bg-[#0B0D12] border border-[#292D36] text-xs text-[#F5F5F7] placeholder-[#A5A8B2]/50 focus:outline-none focus:border-[#B9A0FF] transition-colors resize-none"
+                      aria-invalid={Boolean(errors.message)}
+                      aria-describedby={errors.message ? 'message-error' : undefined}
+                      className={`w-full px-3.5 py-2 rounded-lg bg-[#0B0D12] border text-xs text-[#F5F5F7] placeholder-[#A5A8B2]/50 focus:outline-none transition-colors resize-none disabled:opacity-50 ${
+                        errors.message
+                          ? 'border-red-500/80 focus:border-red-400'
+                          : 'border-[#292D36] focus:border-[#B9A0FF]'
+                      }`}
                     />
+                    {errors.message && (
+                      <p id="message-error" className="mt-1.5 text-[11px] font-mono text-red-400">
+                        {errors.message}
+                      </p>
+                    )}
                   </div>
 
+                  {/* Send Message Button */}
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="w-full py-2.5 px-4 rounded-lg font-medium text-xs bg-[#B9A0FF] hover:bg-[#cbb8ff] text-[#0B0D12] transition-all hover:shadow-[0_0_15px_rgba(185,160,255,0.25)] flex items-center justify-center gap-1.5 disabled:opacity-50"
+                    className="w-full py-2.5 px-4 rounded-lg font-medium text-xs bg-[#B9A0FF] hover:bg-[#cbb8ff] text-[#0B0D12] transition-all hover:shadow-[0_0_15px_rgba(185,160,255,0.25)] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                   >
-                    <Send className="w-3.5 h-3.5" />
-                    <span>{submitting ? 'Sending...' : 'Send Message'}</span>
+                    {submitting ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <span>Sending...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-3.5 h-3.5" />
+                        <span>Send Message</span>
+                      </>
+                    )}
                   </button>
                 </form>
               )}
