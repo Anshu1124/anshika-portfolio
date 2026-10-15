@@ -37,14 +37,17 @@ export const Contact: React.FC<ContactProps> = () => {
   const [submitStatus, setSubmitStatus] = useState<SubmitStatus>({ type: 'idle' });
   const shouldReduceMotion = useReducedMotion();
 
-  // Read Formspree endpoint from environment variable, stripping any accidental surrounding quotes
+  // Read Formspree endpoint from environment variable with safe fallback to your Formspree endpoint
+  const DEFAULT_FORMSPREE_ENDPOINT = 'https://formspree.io/f/xrpeopvp';
   const rawEndpoint = (import.meta.env.VITE_FORMSPREE_ENDPOINT || '').trim();
-  const endpoint = rawEndpoint.replace(/^["']|["']$/g, '').trim();
-  const isEndpointConfigured = Boolean(
-    endpoint &&
-    !endpoint.includes('your_form_id') &&
-    !endpoint.includes('FORM_ID')
-  );
+  const cleanEnvEndpoint = rawEndpoint.replace(/^["']|["']$/g, '').trim();
+  const endpoint = (
+    cleanEnvEndpoint &&
+    !cleanEnvEndpoint.includes('your_form_id') &&
+    !cleanEnvEndpoint.includes('FORM_ID')
+  ) ? cleanEnvEndpoint : DEFAULT_FORMSPREE_ENDPOINT;
+
+  const isEndpointConfigured = Boolean(endpoint);
 
   const copyEmail = () => {
     navigator.clipboard.writeText(PERSONAL_INFO.email);
@@ -413,6 +416,12 @@ export const Contact: React.FC<ContactProps> = () => {
                       value={formData.message}
                       onChange={handleChange}
                       onBlur={handleBlur}
+                      onKeyDown={(e) => {
+                        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                          e.preventDefault();
+                          handleSubmit(e);
+                        }
+                      }}
                       placeholder="Write your note or opportunity details..."
                       aria-invalid={Boolean(errors.message)}
                       aria-describedby={errors.message ? 'message-error' : undefined}
