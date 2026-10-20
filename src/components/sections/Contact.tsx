@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Copy, Check, ArrowUpRight, Send, Loader2, AlertCircle, AlertTriangle } from 'lucide-react';
+import { Copy, Check, ArrowUpRight, Send, Loader2, AlertCircle, AlertTriangle, Download } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { PERSONAL_INFO } from '../../data/portfolioData';
 import { GithubIcon, LinkedinIcon } from '../common/Icons';
@@ -243,7 +243,7 @@ export const Contact: React.FC<ContactProps> = () => {
                 <a
                   href={PERSONAL_INFO.github}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="p-4 rounded-xl bg-[#141720] border border-[#292D36] hover:border-[#B9A0FF]/40 text-[#A5A8B2] hover:text-[#F5F5F7] transition-all flex items-center justify-between group hover:-translate-y-0.5"
                 >
                   <div className="flex items-center gap-2.5">
@@ -256,7 +256,7 @@ export const Contact: React.FC<ContactProps> = () => {
                 <a
                   href={PERSONAL_INFO.linkedin}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="p-4 rounded-xl bg-[#141720] border border-[#292D36] hover:border-[#B9A0FF]/40 text-[#A5A8B2] hover:text-[#F5F5F7] transition-all flex items-center justify-between group hover:-translate-y-0.5"
                 >
                   <div className="flex items-center gap-2.5">
@@ -267,19 +267,35 @@ export const Contact: React.FC<ContactProps> = () => {
                 </a>
               </div>
 
-              {/* Download Resume Action */}
-              <a
-                href="/Anshika_Agarwal_Resume.pdf"
-                download="Anshika_Agarwal_Resume.pdf"
-                className="w-full p-4 rounded-xl bg-[#141720] border border-[#292D36] hover:border-[#B9A0FF]/60 text-[#F5F5F7] hover:text-[#B9A0FF] transition-all flex items-center justify-between group hover:-translate-y-0.5"
-                title="Download original curriculum vitae PDF"
-              >
-                <div className="flex items-center gap-2.5">
-                  <span className="w-2 h-2 rounded-full bg-[#B9A0FF]"></span>
-                  <span className="text-xs font-mono font-medium">Download Résumé (PDF)</span>
-                </div>
-                <ArrowUpRight className="w-3.5 h-3.5 text-[#A5A8B2] group-hover:text-[#B9A0FF] transition-colors" />
-              </a>
+              {/* View & Download Resume Actions */}
+              <div className="grid grid-cols-2 gap-3">
+                <a
+                  href="/Anshika_Agarwal_Resume.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-4 rounded-xl bg-[#141720] border border-[#292D36] hover:border-[#B9A0FF]/60 text-[#F5F5F7] hover:text-[#B9A0FF] transition-all flex items-center justify-between group hover:-translate-y-0.5"
+                  title="View original curriculum vitae PDF in new tab"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-2 h-2 rounded-full bg-[#B9A0FF]"></span>
+                    <span className="text-xs font-mono font-medium">View Résumé</span>
+                  </div>
+                  <ArrowUpRight className="w-3.5 h-3.5 text-[#A5A8B2] group-hover:text-[#B9A0FF] transition-colors" />
+                </a>
+
+                <a
+                  href="/Anshika_Agarwal_Resume.pdf"
+                  download="Anshika_Agarwal_Resume.pdf"
+                  className="p-4 rounded-xl bg-[#141720] border border-[#292D36] hover:border-[#B9A0FF]/60 text-[#F5F5F7] hover:text-[#B9A0FF] transition-all flex items-center justify-between group hover:-translate-y-0.5"
+                  title="Download original curriculum vitae PDF"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Download className="w-3.5 h-3.5 text-[#B9A0FF]" />
+                    <span className="text-xs font-mono font-medium">Download</span>
+                  </div>
+                  <ArrowUpRight className="w-3.5 h-3.5 text-[#A5A8B2] group-hover:text-[#B9A0FF] transition-colors" />
+                </a>
+              </div>
 
               {/* Location & Timezone Note */}
               <div className="text-xs font-mono text-[#A5A8B2] px-1 pt-1">

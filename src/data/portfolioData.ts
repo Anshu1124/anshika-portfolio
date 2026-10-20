@@ -15,9 +15,9 @@ export const PERSONAL_INFO = {
   gradYear: '2024 – 2028',
   status: 'Undergraduate Student & ACC Coordinator',
   location: 'Gwalior, Madhya Pradesh, India',
-  email: 'anshika.agarwal.dev@gmail.com',
-  github: 'https://github.com/anshikaagarwal',
-  linkedin: 'https://linkedin.com/in/anshika-agarwal',
+  email: 'anshika1124agarwal@gmail.com',
+  github: 'https://github.com/Anshu1124',
+  linkedin: 'https://www.linkedin.com/in/anshika-agarwal11/',
   resumeUrl: '/Anshika_Agarwal_Resume.pdf',
   bio: `I am a Computer Science undergraduate focused on full-stack web engineering, real-time architectures, and applied systems. My work spans government-grade queue dispatch systems (Gatimaan), agricultural workflow platforms (KrishiLink), and emergency safety telemetry initiatives (NaariShield). As coordinator of the Amity Coding Club, I organize hands-on technical workshops and mentor student peers.`,
   careerGoals: [

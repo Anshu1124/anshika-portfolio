@@ -169,7 +169,7 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
         {/* Footer info note */}
         <div className="bg-[#141720] px-6 py-3 border-t border-[#292D36] text-[11px] font-mono text-[#A5A8B2] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <span>
-            Official document located at <code className="text-[#B9A0FF] bg-[#0B0D12] px-1 py-0.5 rounded border border-[#292D36]">public/resume.pdf</code>.
+            Official document located at <code className="text-[#B9A0FF] bg-[#0B0D12] px-1 py-0.5 rounded border border-[#292D36]">public/Anshika_Agarwal_Resume.pdf</code>.
           </span>
           <button
             type="button"

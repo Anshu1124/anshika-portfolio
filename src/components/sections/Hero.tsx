@@ -64,7 +64,7 @@ export const Hero: React.FC = () => {
               <a
                 href={PERSONAL_INFO.github}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 hover:text-[#F5F5F7] transition-colors group"
                 aria-label="GitHub Profile"
               >
@@ -78,7 +78,7 @@ export const Hero: React.FC = () => {
               <a
                 href={PERSONAL_INFO.linkedin}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 hover:text-[#F5F5F7] transition-colors group"
                 aria-label="LinkedIn Profile"
               >

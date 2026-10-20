@@ -208,7 +208,7 @@ export const Projects: React.FC<ProjectsProps> = ({ onSelectProject }) => {
                       <a
                         href={project.githubUrl}
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                         className="inline-flex items-center gap-1.5 text-[#A5A8B2] hover:text-[#F5F5F7] transition-colors p-1.5 rounded hover:bg-[#141720] border border-transparent hover:border-[#292D36]"
                         title={`View GitHub Repository for ${project.title}`}
                         aria-label={`View GitHub repository for ${project.title}`}

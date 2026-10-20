@@ -121,7 +121,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
               <a
                 href={project.githubUrl}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="p-2 rounded-lg bg-[#0B0D12] text-[#A5A8B2] hover:text-[#F5F5F7] border border-[#292D36] hover:border-[#B9A0FF]/40 transition-colors inline-flex items-center gap-1 text-xs font-mono"
                 title="View GitHub Repository"
                 aria-label={`View GitHub repository for ${project.title}`}
@@ -135,7 +135,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
               <a
                 href={project.liveUrl}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="p-2 rounded-lg bg-[#0B0D12] text-[#A5A8B2] hover:text-[#F5F5F7] border border-[#292D36] hover:border-[#B9A0FF]/40 transition-colors inline-flex items-center gap-1 text-xs font-mono"
                 title="Open Live Prototype"
                 aria-label={`Open live prototype for ${project.title}`}
@@ -585,7 +585,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
               <a
                 href={project.githubUrl}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="px-3 py-1.5 rounded-lg bg-[#0B0D12] text-[#F5F5F7] hover:text-[#B9A0FF] border border-[#292D36] hover:border-[#B9A0FF]/40 font-mono text-xs transition-colors inline-flex items-center gap-1.5"
               >
                 <GithubIcon className="w-3.5 h-3.5" />
