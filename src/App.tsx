@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Navbar } from './components/common/Navbar';
 import { Hero } from './components/sections/Hero';
 import { About } from './components/sections/About';
@@ -9,21 +9,52 @@ import { Contact } from './components/sections/Contact';
 import { Footer } from './components/sections/Footer';
 import { CaseStudyModal } from './components/common/CaseStudyModal';
 import { ResumeModal } from './components/common/ResumeModal';
+import { PROJECTS_DATA, PERSONAL_INFO } from './data/portfolioData';
 import type { ProjectData } from './types/portfolio';
 
 export function App() {
   const [isResumeOpen, setIsResumeOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
 
+  // Sync state with URL search params on mount & popstate
+  useEffect(() => {
+    const syncFromUrl = () => {
+      const params = new URLSearchParams(window.location.search);
+      const projectId = params.get('project');
+      if (projectId) {
+        const match = PROJECTS_DATA.find((p) => p.id.toLowerCase() === projectId.toLowerCase());
+        if (match) {
+          setSelectedProject(match);
+          document.title = `${match.title} — Technical Case Study | ${PERSONAL_INFO.name}`;
+          return;
+        }
+      }
+      setSelectedProject(null);
+      document.title = `${PERSONAL_INFO.name} — Software Engineer & Full-Stack Developer`;
+    };
+
+    syncFromUrl();
+    window.addEventListener('popstate', syncFromUrl);
+    return () => window.removeEventListener('popstate', syncFromUrl);
+  }, []);
+
   const handleOpenResume = () => setIsResumeOpen(true);
   const handleCloseResume = () => setIsResumeOpen(false);
 
   const handleSelectProject = (project: ProjectData) => {
     setSelectedProject(project);
+    const url = new URL(window.location.href);
+    url.searchParams.set('project', project.id);
+    window.history.pushState({ projectId: project.id }, '', url.toString());
+    document.title = `${project.title} — Technical Case Study | ${PERSONAL_INFO.name}`;
   };
 
   const handleCloseCaseStudy = () => {
     setSelectedProject(null);
+    const url = new URL(window.location.href);
+    url.searchParams.delete('project');
+    window.history.pushState(null, '', url.pathname + (url.hash || ''));
+    document.title = `${PERSONAL_INFO.name} — Software Engineer & Full-Stack Developer`;
   };
 
   return (

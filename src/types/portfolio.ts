@@ -6,11 +6,26 @@ export interface ArchitectureLayer {
   keyDetails: string[];
 }
 
+export interface UserWorkflowStep {
+  persona: string;
+  roleDescription?: string;
+  steps: string[];
+}
+
+export interface TechnologyItem {
+  name: string;
+  category: 'Frontend' | 'Backend' | 'Database' | 'Hardware/IoT' | 'Auth & Realtime' | 'Mobile & Cloud' | 'Internationalization' | 'GIS/Data' | string;
+  role: string;
+  purpose?: string;
+}
+
 export interface ProjectData {
   id: string;
+  projectNumber: string;
   title: string;
   subtitle: string;
-  category: 'Full-Stack' | 'Geospatial & Systems' | 'IoT & Hardware' | 'Safety Platform';
+  category: 'Full-Stack' | 'Geospatial & Systems' | 'IoT & Hardware' | 'Safety Platform' | string;
+  categoryDomain: string;
   tagline: string;
   brief: string;
   featured: boolean;
@@ -18,21 +33,21 @@ export interface ProjectData {
   githubUrl?: string;
   liveUrl?: string;
   demoNote?: string;
+  highlights: string[];
   
   // Technical Case Study Fields
   problemStatement: string;
   targetAudience: string;
+  objectives: string[];
+  solutionOverview: string;
+  userWorkflow: UserWorkflowStep[];
   systemArchitecture: {
     summary: string;
-    diagramType: 'gatimaan-queue' | 'sentinel-spatial' | 'iot-telemetry' | 'safety-network';
+    diagramType: 'gatimaan-queue' | 'sentinel-spatial' | 'iot-telemetry' | 'safety-network' | 'krishilink-marketplace' | string;
     layers: ArchitectureLayer[];
     dataFlowSteps: string[];
   };
-  technologies: {
-    name: string;
-    category: 'Frontend' | 'Backend' | 'Database' | 'Hardware/IoT' | 'Auth & Realtime' | 'GIS/Data';
-    role: string;
-  }[];
+  technologies: TechnologyItem[];
   myContribution: string[];
   engineeringChallenges: {
     challenge: string;
@@ -41,6 +56,10 @@ export interface ProjectData {
   }[];
   featuresImplemented: string[];
   featuresInProgress: string[];
+  testingAndVerification: string[];
+  resultsAndAchievements: string[];
+  knownLimitations: string[];
+  futureImprovements: string[];
   isEditableCaseStudy?: boolean;
 }
 

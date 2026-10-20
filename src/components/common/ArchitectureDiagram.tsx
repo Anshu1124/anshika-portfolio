@@ -3,7 +3,7 @@ import { Layers, ArrowRight, Database, Server, Smartphone, Cpu, ShieldCheck } fr
 import type { ArchitectureLayer } from '../../types/portfolio';
 
 interface ArchitectureDiagramProps {
-  type: 'gatimaan-queue' | 'sentinel-spatial' | 'iot-telemetry' | 'safety-network';
+  type: 'gatimaan-queue' | 'sentinel-spatial' | 'iot-telemetry' | 'safety-network' | 'krishilink-marketplace' | string;
   layers: ArchitectureLayer[];
   flowSteps: string[];
 }
@@ -17,10 +17,11 @@ export const ArchitectureDiagram: React.FC<ArchitectureDiagramProps> = ({
   const activeLayer = layers[selectedLayerIndex] || layers[0];
 
   const typeLabels: Record<string, string> = {
-    'gatimaan-queue': 'Queue Orchestrator',
+    'gatimaan-queue': 'Queue Orchestrator Pipeline',
     'sentinel-spatial': 'Spatial Analytics Engine',
     'iot-telemetry': 'IoT Hardware Telemetry',
     'safety-network': 'Spatial Safety Network',
+    'krishilink-marketplace': 'Marketplace & Workflow Engine',
   };
 
   return (
